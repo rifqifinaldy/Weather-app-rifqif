@@ -14,3 +14,28 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.background {
+  position: relative;
+  text-align: center;
+  height: 90vh;
+  justify-content: center;
+  align-items: center;
+  z-index: -999;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.card-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+}
+@media only screen and (max-width: 768px) {
+  .card-content {
+    width: 75%;
+  }
+}
+
