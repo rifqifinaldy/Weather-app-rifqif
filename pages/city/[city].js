@@ -8,7 +8,7 @@ export async function getServerSideProps(context) {
   console.log(context.query);
   // Get Request metode server side
   const res = await fetch(
-    `${WEATHER_APP_BASE_URL}weather?lat=${context.query.lat}&lon=${context.query.lng}&appid=${WEATHER_APP_ID}`
+    `${WEATHER_APP_BASE_URL}weather?lat=${context.query.lat}&lon=${context.query.lng}&&units=metric&appid=${WEATHER_APP_ID}`
   );
   const data = await res.json();
 

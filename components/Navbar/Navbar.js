@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,14 +10,10 @@ import { Search, SearchIconWrapper, StyledInputBase } from "./navbar.style";
 import { TextField, Tooltip } from "@mui/material";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { cityCoordinate } from "../../utility/city";
 
 export default function Navbar() {
   const router = useRouter();
-  const city = [
-    { id: 0, label: "Jakarta", lat: -6.2146, lng: 106.8451 },
-    { id: 1, label: "Surabaya", lat: -7.2458, lng: 112.7378 },
-  ];
-
   const search = (e, value) => {
     console.log(value);
     router.push(
@@ -62,7 +57,7 @@ export default function Navbar() {
               onChange={(e, value) => search(e, value)}
               size="small"
               id="combo-box-demo"
-              options={city}
+              options={cityCoordinate}
               sx={{ width: 300 }}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Search City...." />

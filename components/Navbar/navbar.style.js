@@ -1,5 +1,4 @@
 import { Autocomplete } from "@mui/material";
-import InputBase from "@mui/material/InputBase";
 import { styled, alpha } from "@mui/material/styles";
 
 export const Search = styled("div")(({ theme }) => ({
