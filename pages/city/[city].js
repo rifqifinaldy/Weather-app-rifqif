@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export async function getServerSideProps(context) {
   const slug = context.params.city;
-  console.log(context.query);
+  
   // Get Request metode server side
   const res = await fetch(
     `${WEATHER_APP_BASE_URL}weather?lat=${context.query.lat}&lon=${context.query.lng}&&units=metric&appid=${WEATHER_APP_ID}`

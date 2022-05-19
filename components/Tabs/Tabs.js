@@ -3,18 +3,18 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/system";
 import PropTypes from "prop-types";
 
-export const TabPanel = ({ children, value, index, ...other }) => {
+export const TabPanel = ({ children, value, index, id, ...other }) => {
   return (
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`${id}` + index}
+      aria-labelledby={`${id}` + index}
       {...other}
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          <>{children}</>
         </Box>
       )}
     </div>
@@ -27,11 +27,9 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export const a11yProps = (index) => {
+export const a11yProps = (index, id) => {
   return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    id: `${id}` + index,
+    "aria-controls": `${id}` + index,
   };
-}
-
-
+};

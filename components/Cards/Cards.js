@@ -15,9 +15,8 @@ export default function RFCard({
   cloudiness,
   humidity,
   temperature,
-  pressure
+  pressure,
 }) {
-  const theme = useTheme();
 
   return (
     <Card sx={{ display: "flex" }}>
@@ -26,7 +25,6 @@ export default function RFCard({
           <Typography align="center" component="div" variant="h5">
             {title}
           </Typography>
-
           <Divider>
             <Typography variant="h6" color="text.secondary" component="div">
               {subtitle}
@@ -73,3 +71,4 @@ export default function RFCard({
     </Card>
   );
 }
+
