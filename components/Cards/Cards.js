@@ -3,44 +3,72 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import SkipNextIcon from "@mui/icons-material/SkipNext";
 import Image from "next/image";
+import { capitalize, Divider, Grid } from "@mui/material";
 
-export default function RFCard() {
+export default function RFCard({
+  title,
+  subtitle,
+  description,
+  icon,
+  cloudiness,
+  humidity,
+  temperature,
+  pressure
+}) {
   const theme = useTheme();
 
   return (
     <Card sx={{ display: "flex" }}>
       <Box sx={{ display: "flex", flexDirection: "column", width: "65%" }}>
         <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography component="div" variant="h5">
-            Bandung
+          <Typography align="center" component="div" variant="h5">
+            {title}
           </Typography>
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            component="div"
-          >
-            lorem
-          </Typography>
+
+          <Divider>
+            <Typography variant="h6" color="text.secondary" component="div">
+              {subtitle}
+            </Typography>
+          </Divider>
+          <Grid sx={{ justifyContent: "center", textAlign: "center" }} container spacing={2}>
+            <Grid item xs={6}>
+              <Typography variant="p" component="div">
+                Cloudiness : {cloudiness} %
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="p" component="div">
+                Humidity : {humidity} %
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="p" component="div">
+                Temperature : {temperature}&deg; C
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="p" component="div">
+                Pressure : {pressure} hPA
+              </Typography>
+            </Grid>
+          </Grid>
         </CardContent>
         <Box sx={{ display: "flex", alignItems: "center", pl: 1, pb: 1 }}></Box>
       </Box>
-      <Box>
+      <Box sx={{ justifyContent: "center", pb: 1 }}>
         <Image
-          src="http://openweathermap.org/img/wn/10d@4x.png"
+          src={icon}
           layout="intrinsic"
           width={150}
           height={150}
           priority="lazy"
           alt="Weather Icon"
         />
-        <p>Light Rain</p>
+        <Typography align="center" color="text.secondary" variant="h6">
+          {capitalize(description)}
+        </Typography>
       </Box>
     </Card>
   );

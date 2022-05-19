@@ -1,33 +1,44 @@
 import { Container } from "@mui/system";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import RFCard from "../components/Cards/Cards";
+import { WEATHER_APP_BASE_URL, WEATHER_APP_ID } from "../utility/global";
 
 export default function Home() {
+  const [weather, setWeather] = useState({});
 
-  // Kenapa gak di server side ? karena Latitude dan Longitude 
+  // Kenapa gak di server side ? karena Latitude dan Longitude
   // tidak bisa diakses oleh geolocation secara langsung https://stackoverflow.com/questions/60399243/node-js-referenceerror-navigator-is-not-defined
   const getLocation = () => {
+    
+  };
+
+ 
+
+  useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(getWeather);
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
-  }
-
-  // Request API
-  function getWeather(position) {
-    console.log("Current Position", position.coords.latitude + "-" + position.coords.longitude);
-    fetch(`https://jsonplaceholder.typicode.com/posts`)
-   .then((response) => console.log(response))
-   .catch((error) => console.log(error))
-  }
-
-  useEffect(() => {
-    getLocation();
-    return () => {};
+    return () => {
+      console.log("Dismounted");
+    };
   }, []);
 
+   // Get Request
+   const getWeather = async (position) => {
+    console.log(
+      "Current Position",
+      position.coords.latitude + "-" + position.coords.longitude
+    );
+    const response = await fetch(
+      `${WEATHER_APP_BASE_URL}weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=${WEATHER_APP_ID}`
+    );
+    setWeather(await response.json());
+  };
+
+  console.log(weather);
   return (
     <>
       <div className="background">
@@ -40,9 +51,21 @@ export default function Home() {
           priority={true}
         />
       </div>
-      <div className="card-content">
-        <RFCard />
-      </div>
+      {/* Handle error bila Browser Belum Mengizinkan Akses Lokasi */}
+      {weather.weather && (
+        <div className="card-content">
+          <RFCard
+            title="Current Weather"
+            subtitle={weather.name}
+            cloudiness={weather.clouds.all}
+            humidity={weather.main.humidity}
+            temperature={weather.main.temp}
+            pressure={weather.main.pressure}
+            icon = {`http://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`}
+            description={weather.weather[0].description}
+          />
+        </div>
+      )}
     </>
   );
 }
