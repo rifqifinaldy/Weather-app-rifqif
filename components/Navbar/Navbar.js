@@ -8,30 +8,41 @@ import Typography from "@mui/material/Typography";
 import CloudIcon from "@mui/icons-material/Cloud";
 import SearchIcon from "@mui/icons-material/Search";
 import { Search, SearchIconWrapper, StyledInputBase } from "./navbar.style";
-import { InputAdornment, TextField } from "@mui/material";
+import { TextField, Tooltip } from "@mui/material";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Navbar() {
-  const top100Films = [
-    { label: "The Shawshank Redemption", year: 1994 },
-    { label: "The Godfather", year: 1972 },
-    { label: "The Godfather: Part II", year: 1974 },
-    { label: "The Dark Knight", year: 2008 },
-    { label: "12 Angry Men", year: 1957 },
-    { label: "Schindler's List", year: 1993 },
+  const router = useRouter();
+  const city = [
+    { id: 0, label: "Jakarta", lat: -6.2146, lng: 106.8451 },
+    { id: 1, label: "Surabaya", lat: -7.2458, lng: 112.7378 },
   ];
+
+  const search = (e, value) => {
+    console.log(value);
+    router.push(
+      `/city/${value.label.toLowerCase()}?lat=${value.lat}&lng=${value.lng}`
+    );
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <CloudIcon />
-          </IconButton>
+          <Link href="/">
+            <Tooltip title="Go to Current Location">
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                sx={{ mr: 2 }}
+              >
+                <CloudIcon />
+              </IconButton>
+            </Tooltip>
+          </Link>
           <Typography
             variant="h6"
             noWrap
@@ -45,18 +56,16 @@ export default function Navbar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search City..."
-              size="small"
               disablePortal
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              disableClearable
+              onChange={(e, value) => search(e, value)}
+              size="small"
               id="combo-box-demo"
-              options={top100Films}
+              options={city}
               sx={{ width: 300 }}
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="Search City...."
-                 
-                />
+                <TextField {...params} placeholder="Search City...." />
               )}
             />
           </Search>

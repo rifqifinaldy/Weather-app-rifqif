@@ -1,4 +1,3 @@
-import { Container } from "@mui/system";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import RFCard from "../components/Cards/Cards";
@@ -6,14 +5,8 @@ import { WEATHER_APP_BASE_URL, WEATHER_APP_ID } from "../utility/global";
 
 export default function Home() {
   const [weather, setWeather] = useState({});
-
   // Kenapa gak di server side ? karena Latitude dan Longitude
   // tidak bisa diakses oleh geolocation secara langsung https://stackoverflow.com/questions/60399243/node-js-referenceerror-navigator-is-not-defined
-  const getLocation = () => {
-    
-  };
-
- 
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -22,23 +15,18 @@ export default function Home() {
       console.log("Geolocation is not supported by this browser.");
     }
     return () => {
-      console.log("Dismounted");
+      console.log("Cleaning Up...");
     };
   }, []);
 
-   // Get Request
-   const getWeather = async (position) => {
-    console.log(
-      "Current Position",
-      position.coords.latitude + "-" + position.coords.longitude
-    );
+  // Get Request
+  const getWeather = async (position) => {
     const response = await fetch(
       `${WEATHER_APP_BASE_URL}weather?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=${WEATHER_APP_ID}`
     );
     setWeather(await response.json());
   };
 
-  console.log(weather);
   return (
     <>
       <div className="background">
@@ -61,7 +49,7 @@ export default function Home() {
             humidity={weather.main.humidity}
             temperature={weather.main.temp}
             pressure={weather.main.pressure}
-            icon = {`http://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`}
+            icon={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`}
             description={weather.weather[0].description}
           />
         </div>
