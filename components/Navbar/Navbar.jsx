@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,11 +14,16 @@ import { cityCoordinate } from "../../utility/city";
 
 export default function Navbar() {
   const router = useRouter();
+  const [clear, setClear] = useState(false);
   const search = (e, value) => {
-    console.log(value);
     router.push(
       `/city/${value.label.toLowerCase()}?lat=${value.lat}&lng=${value.lng}`
     );
+  };
+
+  // Clear Search value jika kembali ke homepage
+  const handleClear = () => {
+    setClear(!clear);
   };
 
   return (
@@ -26,17 +31,19 @@ export default function Navbar() {
       <AppBar position="static">
         <Toolbar>
           <Link href="/">
-            <Tooltip title="Go to Current Location">
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                sx={{ mr: 2 }}
-              >
-                <CloudIcon />
-              </IconButton>
-            </Tooltip>
+            <a onClick={(e) => handleClear()}>
+              <Tooltip title="Go to Current Location">
+                <IconButton
+                  size="large"
+                  edge="start"
+                  color="inherit"
+                  aria-label="open drawer"
+                  sx={{ mr: 2 }}
+                >
+                  <CloudIcon />
+                </IconButton>
+              </Tooltip>
+            </a>
           </Link>
           <Typography
             variant="h6"
@@ -51,12 +58,13 @@ export default function Navbar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              disablePortal
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              disableClearable
-              onChange={(e, value) => search(e, value)}
-              size="small"
               id="combo-box-demo"
+              size="small"
+              disablePortal={true}
+              disableClearable={true}
+              key={clear}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              onChange={(e, value) => search(e, value)}
               options={cityCoordinate}
               sx={{ width: 300 }}
               renderInput={(params) => (

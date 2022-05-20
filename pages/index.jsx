@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import RFCard from "../components/Cards/Cards";
 import { WEATHER_APP_BASE_URL, WEATHER_APP_ID } from "../utility/global";
@@ -6,9 +5,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { TabPanel, a11yProps } from "../components/Tabs/Tabs";
-import { Grid } from "@mui/material";
+import { Typography } from "@mui/material";
 
 export default function Home() {
+  
   const [current, setCurrent] = useState({});
   const [forecast, setForecast] = useState({});
   const [value, setValue] = useState(0);
@@ -23,7 +23,7 @@ export default function Home() {
   };
 
   // Kenapa gak di server side ? karena Latitude dan Longitude
-  // tidak bisa diakses oleh geolocation secara langsung https://stackoverflow.com/questions/60399243/node-js-referenceerror-navigator-is-not-defined
+  // tidak bisa diakses oleh geolocation secara server side https://stackoverflow.com/questions/60399243/node-js-referenceerror-navigator-is-not-defined
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -31,9 +31,6 @@ export default function Home() {
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
-    return () => {
-      console.log("Cleaning Up...");
-    };
   }, []);
 
   // Get Request
@@ -47,7 +44,6 @@ export default function Home() {
           `${WEATHER_APP_BASE_URL}/forecast?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=metric&appid=${WEATHER_APP_ID}`
         ),
       ]);
-      // console.log(await current.json());
       const hourly = await forecast.json();
       const now = await current.json();
       setCurrent(now);
@@ -59,19 +55,9 @@ export default function Home() {
 
   return (
     <>
-      <div className="background">
-        <Image
-          alt="Weather-app"
-          src="/images/background-cold.jpg"
-          objectFit="cover"
-          layout="fill"
-          quality={100}
-          priority={true}
-        />
-      </div>
       {/* Handle error bila Browser Belum Mengizinkan Akses Lokasi */}
-      {current.weather && (
-        <div className="card-content">
+      {current.weather ? (
+        <>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
               value={tabIndex}
@@ -114,7 +100,6 @@ export default function Home() {
                 </TabPanel>
               );
             })}
-
             <Tabs
               value={value}
               onChange={handleChange}
@@ -123,17 +108,37 @@ export default function Home() {
               variant="scrollable"
             >
               {forecast.list.map((forecasts, i) => {
+                // Split Tanggal dan Jam agar dapat di customize
+                const dateTime = forecasts.dt_txt.split(" ");
                 return (
                   <Tab
                     key={i}
-                    label={forecasts.dt_txt}
+                    label={
+                      <>
+                        <Typography variant="p">
+                          {new Date(dateTime[0]).toDateString()}
+                        </Typography>{" "}
+                        <Typography variant="caption">{dateTime[1]}</Typography>
+                      </>
+                    }
                     {...a11yProps(i, "forecast-tabs")}
                   />
                 );
               })}
             </Tabs>
           </TabPanel>
-        </div>
+        </>
+      ) : (
+        <>
+          <Typography
+            sx={{ color: "info.main", fontWeight: "bold" }}
+            align="center"
+            variant="h4"
+          >
+            To Access Current Location Weather, Please Enable Your Location From
+            your Browser
+          </Typography>
+        </>
       )}
     </>
   );

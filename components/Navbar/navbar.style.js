@@ -9,7 +9,6 @@ export const Search = styled("div")(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginLeft: 0,
-  width: "100%",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
     width: "auto",
@@ -17,8 +16,9 @@ export const Search = styled("div")(({ theme }) => ({
 }));
 
 export const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
+  padding: theme.spacing(0, 1),
   height: "100%",
+  opacity: 0.75,
   position: "absolute",
   pointerEvents: "none",
   display: "flex",
@@ -27,6 +27,8 @@ export const SearchIconWrapper = styled("div")(({ theme }) => ({
 }));
 
 export const StyledInputBase = styled(Autocomplete)(({ theme }) => ({
-  color: "inherit",
-  backgroundColor: "white",
+  "& input": {
+    marginLeft: "2em",
+    color: theme.palette.info.main,
+  },
 }));
